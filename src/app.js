@@ -11,13 +11,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: [
-            "http://localhost:3000",
-            "https://dnb.sigasystems.com",
-            "https://sigasystems.com",
-        ],
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-        credentials: true,
+        origin: "*",
     })
 ); // Enable CORS for all routes
 
