@@ -9,7 +9,7 @@ export const TodosProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "http://localhost:5000/api/todos"; // your backend URL 
+  const API_URL = `${import.meta.env.VITE_API_URL}/api/todos`; // your backend URL 
 
   const fetchTodos = async () => {
     if (!user?.token) return; // Skip if no logged-in user
