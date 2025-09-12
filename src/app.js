@@ -16,6 +16,7 @@ app.use(
             "https://dnb.sigasystems.com",
             "https://sigasystems.com",
         ],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true,
     })
 ); // Enable CORS for all routes
