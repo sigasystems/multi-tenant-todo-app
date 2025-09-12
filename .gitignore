@@ -43,3 +43,4 @@ build/
 # Optional: Docker
 docker-compose.override.yml
 .docker/
+.vercel
