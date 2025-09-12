@@ -9,7 +9,16 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors()); // Enable CORS for all routes
+app.use(
+    cors({
+        origin: [
+            "http://localhost:3000",
+            "https://dnb.sigasystems.com",
+            "https://sigasystems.com",
+        ],
+        credentials: true,
+    })
+); // Enable CORS for all routes
 
 app.use(express.json()); // For JSON body parsing
 app.use(express.urlencoded({ extended: true })); // For URL-encoded body parsing
