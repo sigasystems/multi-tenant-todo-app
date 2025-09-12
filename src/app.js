@@ -8,8 +8,19 @@ import todoRoutes from "./routes/todoRoutes.js";
 dotenv.config();
 
 const app = express();
+app.use(
+    cors({
+        origin: [
+            "https://dnb.sigasystems.com",
+            "https://sigasystems.com",
+            "http://localhost:5173",
+        ],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        credentials: true,
+    })
+);
 
-app.use(cors({ origin: "*" })); // Enable CORS for all routes
+app.options(/^.*$/, cors());
 
 app.use(express.json()); // For JSON body parsing
 app.use(express.urlencoded({ extended: true })); // For URL-encoded body parsing
