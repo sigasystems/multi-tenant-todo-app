@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { TenantRequestContext } from "../../context/TenantRequestContext";
 import { format } from "date-fns";
+import { Select, MenuItem, FormControl } from "@mui/material";
 
 // We'll use simple SVG icons for a pure Tailwind/React setup
 const PendingIcon = () => (
@@ -76,7 +77,7 @@ const TenantAdminDashboard = () => {
       case "approved":
       case "active":
         return "bg-green-100 text-green-800";
-      case "rejected":
+      case "deleted":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -90,7 +91,7 @@ const TenantAdminDashboard = () => {
       case "approved":
       case "active":
         return <CheckCircleIcon />;
-      case "rejected":
+      case "deleted":
         return <CancelIcon />;
       default:
         return null;
@@ -98,31 +99,15 @@ const TenantAdminDashboard = () => {
   };
 
  
-  // Wrap fetch in useCallback
-  const fetchUsersCallback = useCallback(async () => {
-    if (!tenantId) return;
+ useEffect(() => {
+  const hasReloaded = sessionStorage.getItem("hasReloaded");
 
-    try {
-      setLoading(true);
-      const users = await fetchTenantUsers(tenantId); // assume it returns users array
-      tenantUsers(users || []);
-    } catch (err) {
-      console.error("Error fetching tenant users:", err);
-      setSnackbar({
-        open: true,
-        severity: "error",
-      });
-    } finally {
-      setLoading(false);
+  if (!hasReloaded) {
+    sessionStorage.setItem("hasReloaded", "true");
+    window.location.reload();
     }
   }, []);
 
-  // Fetch immediately and on interval
-  useEffect(() => {
-    fetchUsersCallback(); // immediate fetch
-    const interval = setInterval(fetchUsersCallback, 30000); // every 30s
-    return () => clearInterval(interval);
-  }, [fetchUsersCallback]);
 
   // Filtering Logic
   const filteredUsers = tenantUsers.filter(
@@ -211,11 +196,6 @@ const TenantAdminDashboard = () => {
                 color: "text-green-600",
               },
               {
-                title: "Pending Users",
-                value: userStats.byStatus?.pending || 0,
-                color: "text-yellow-600",
-              },
-              {
                 title: "Inactive Users",
                 value: userStats.byStatus?.inactive || 0,
                 color: "text-gray-500",
@@ -266,21 +246,30 @@ const TenantAdminDashboard = () => {
                   Status Filter
                 </label>
                 <div className="relative">
-                  <select
-                    id="status-filter"
-                    value={statusFilter}
-                    onChange={(e) => {
-                      setStatusFilter(e.target.value);
-                      setCurrentPage(1); // Reset to first page on filter change
-                    }}
-                    className=" cursor-pointer w-full p-2 border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
-                  >
-                    <option value="all">All</option>
-                    <option value="active">Active</option>
-                    <option value="pending">Pending</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+                  <FormControl fullWidth>
+                      <Select
+                        labelId="status-filter-label"
+                        id="status-filter"
+                        value={statusFilter}
+                        onChange={(e) => {
+                          setStatusFilter(e.target.value);
+                          setCurrentPage(1); // Reset to first page
+                        }}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 180, 
+                            },
+                          },
+                        }}
+                        sx={{ cursor: "pointer" }} // cursor pointer on the closed select
+                      >
+                        <MenuItem value="all" sx={{ cursor: "pointer" }}>All</MenuItem>
+                        <MenuItem value="active" sx={{ cursor: "pointer" }}>Active</MenuItem>
+                        <MenuItem value="inactive" sx={{ cursor: "pointer" }}>Inactive</MenuItem>
+                        <MenuItem value="deleted" sx={{ cursor: "pointer" }}>Deleted</MenuItem>
+                      </Select>
+                    </FormControl>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg
                       className="fill-current h-4 w-4"
