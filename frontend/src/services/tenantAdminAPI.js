@@ -1,7 +1,7 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const token = sessionStorage.getItem("token");
 
 async function apiRequest(endpoint, method = "GET", body = null, headers = {}) {
-  const token = sessionStorage.getItem("token");
   const config = {
     method,
     headers: {
@@ -39,11 +39,11 @@ export const tenantApi = {
     }),
      // ✅ New APIs for user management
   activateUser: (userId, token) =>
-    apiRequest(`/tenant-requests/tenant-users/activate/${userId}`, "PUT", null, token),
+    apiRequest(`/tenant-requests/tenant-users/activate/${userId}`, "PUT", null, { Authorization: `Bearer ${token}` }),
 
   deactivateUser: (userId, token) =>
-    apiRequest(`/tenant-requests/tenant-users/deactivate/${userId}`, "PUT", null, token),
+    apiRequest(`/tenant-requests/tenant-users/deactivate/${userId}`, "PUT", null, { Authorization: `Bearer ${token}` }),
 
   softDeleteUser: (userId, token) =>
-    apiRequest(`/tenant-requests/tenant-users/${userId}`, "DELETE", null, token),
+    apiRequest(`/tenant-requests/tenant-users/${userId}`, "DELETE", null, { Authorization: `Bearer ${token}` }),
 };
