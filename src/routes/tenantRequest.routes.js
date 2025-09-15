@@ -44,8 +44,8 @@ router.post("/add-tenant-user", authenticateJWT, addUserUnderTenant);
 router.get("/users/:tenantId", authenticateJWT, getUsersByTenant);
 
 // Tenant admin user management
-router.put("/tenant-users/:userId/activate", authenticateJWT, activateUser);
-router.put("/tenant-users/:userId/deactivate", authenticateJWT, deactivateUser);
+router.put("/tenant-users/activate/:userId", authenticateJWT, activateUser);
+router.put("/tenant-users/deactivate/:userId", authenticateJWT, deactivateUser);
 router.delete("/tenant-users/:userId", authenticateJWT, softDeleteUser);
 
 
@@ -74,9 +74,9 @@ router.delete("/:id", authenticateJWT, softDeleteTenant);
 router.get("/:id", authenticateJWT, getTenantRequestById);
 
 // Activate a tenant
-router.put("/:id/activate", authenticateJWT, activateTenant);
+router.put("/activate/:id", authenticateJWT, activateTenant);
 
 // Deactivate a tenant  
-router.put("/:id/deactivate", authenticateJWT, deactivateTenant);
+router.put("/deactivate/:id", authenticateJWT, deactivateTenant);
 
 export default router;

@@ -20,12 +20,11 @@ app.use(
     })
 );
 
-app.options(/^.*$/, cors());
 
 app.use(express.json()); // For JSON body parsing
 app.use(express.urlencoded({ extended: true })); // For URL-encoded body parsing
 
-app.use("/tenant-requests", tenantRequestRoutes);
+app.use("/api/tenant-requests", tenantRequestRoutes);
 app.use("/api/auth", authRouter); // Mount the auth routes
 app.use("/api/todos", todoRoutes); // Mount the todo routes
 
