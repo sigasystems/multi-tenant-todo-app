@@ -49,10 +49,11 @@ const CancelIcon = () => (
 );
 
 const TenantAdminDashboard = () => {
-  const { tenantUsers, userStats, fetchTenantUsers, tenantId, loadingUsers, errorUsers } =
+  const { tenantUsers, userStats, fetchTenantUsers, tenantId, loadingUsers, errorUsers , requestCounts} =
     useContext(TenantRequestContext);
 
   const [searchTerm, setSearchTerm] = useState("");
+    const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -104,7 +105,7 @@ const TenantAdminDashboard = () => {
     try {
       setLoading(true);
       const users = await fetchTenantUsers(tenantId); // assume it returns users array
-      setTenantUsers(users || []);
+      tenantUsers(users || []);
     } catch (err) {
       console.error("Error fetching tenant users:", err);
       setSnackbar({
@@ -114,7 +115,7 @@ const TenantAdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [tenantId, fetchTenantUsers]);
+  }, []);
 
   // Fetch immediately and on interval
   useEffect(() => {
@@ -197,7 +198,7 @@ const TenantAdminDashboard = () => {
 
         {/* Summary Cards */}
         {!loadingUsers && !errorUsers && (
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {[
               {
                 title: "Total Users",
@@ -206,18 +207,23 @@ const TenantAdminDashboard = () => {
               },
               {
                 title: "Active Users",
-                value: userStats.byStatus?.Active || 0,
+                value: userStats.byStatus?.active || 0,
                 color: "text-green-600",
               },
               {
                 title: "Pending Users",
-                value: userStats.byStatus?.Pending || 0,
+                value: userStats.byStatus?.pending || 0,
                 color: "text-yellow-600",
               },
               {
                 title: "Inactive Users",
-                value: userStats.byStatus?.Inactive || 0,
+                value: userStats.byStatus?.inactive || 0,
                 color: "text-gray-500",
+              },
+              {
+                title: "Deleted Users",
+                value: userStats.byStatus?.deleted || 0,
+                color: "text-red-600",
               },
             ].map((stat) => (
               <div
@@ -311,18 +317,7 @@ const TenantAdminDashboard = () => {
                     >
                       Status
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell"
-                    >
-                      Created
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell"
-                    >
-                      Last Updated
-                    </th>
+                    
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -382,12 +377,7 @@ const TenantAdminDashboard = () => {
                             </span>
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden lg:table-cell">
-                          {safeFormatDate(user.createdAt)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden lg:table-cell">
-                          {safeFormatDate(user.updatedAt)}
-                        </td>
+                      
                       </tr>
                     ))
                   ) : (

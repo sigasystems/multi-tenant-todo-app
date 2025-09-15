@@ -37,6 +37,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import TenantRequestContext from "../../../context/TenantRequestContext";
+import { style } from "@mui/system";
 
 const drawerWidth = 260;
 const collapsedWidth = 80;
@@ -69,8 +70,16 @@ const Sidebar = () => {
         section: "Main",
         items: [
           { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-          { text: "Tenants", icon: <ApartmentIcon />, path: "/superAdmin/tenants" },
-          { text: "Create Tenant", icon: <AddBusinessIcon />, path: "/superAdmin/create" },
+          {
+            text: "Tenants",
+            icon: <ApartmentIcon />,
+            path: "/superAdmin/tenants",
+          },
+          {
+            text: "Create Tenant",
+            icon: <AddBusinessIcon />,
+            path: "/superAdmin/create",
+          },
         ],
       },
       {
@@ -89,7 +98,11 @@ const Sidebar = () => {
             path: "/tenant-admin/users",
             badge: userStats?.totalUsers,
           },
-          { text: "Invite People", icon: <PersonAddIcon />, path: "/tenant-admin/createuser" },
+          {
+            text: "Invite People",
+            icon: <PersonAddIcon />,
+            path: "/tenant-admin/createuser",
+          },
         ],
       },
       {
@@ -238,13 +251,23 @@ const Sidebar = () => {
               {!collapsed && (
                 <Typography
                   variant="caption"
-                  sx={{ pl: 2, pb: 1, fontWeight: "bold", color: "text.secondary" }}
+                  sx={{
+                    pl: 2,
+                    pb: 1,
+                    fontWeight: "bold",
+                    color: "text.secondary",
+                  }}
                 >
                   {section.section}
                 </Typography>
               )}
               {section.items.map((item) => (
-                <Tooltip key={item.text} title={collapsed ? item.text : ""} placement="right" arrow>
+                <Tooltip
+                  key={item.text}
+                  title={collapsed ? item.text : ""}
+                  placement="right"
+                  arrow
+                >
                   <ListItem disablePadding>
                     <ListItemButton
                       component={Link}
@@ -255,13 +278,20 @@ const Sidebar = () => {
                         "&.Mui-selected": {
                           bgcolor: theme.palette.action.selected,
                           color: theme.palette.primary.main,
-                          "& .MuiListItemIcon-root": { color: theme.palette.primary.main },
+                          "& .MuiListItemIcon-root": {
+                            color: theme.palette.primary.main,
+                          },
                         },
                       }}
                     >
                       <ListItemIcon sx={{ minWidth: 40 }}>
                         {item.badge ? (
-                          <Box sx={{ position: "relative", display: "inline-flex" }}>
+                          <Box
+                            sx={{
+                              position: "relative",
+                              display: "inline-flex",
+                            }}
+                          >
                             {item.icon}
                             <Box
                               sx={{
@@ -309,7 +339,7 @@ const Sidebar = () => {
         <Divider />
 
         {/* Footer / Quick Settings */}
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2, textAlign: "center" }}>
           {!collapsed && (
             <Typography
               variant="caption"
@@ -318,15 +348,18 @@ const Sidebar = () => {
               Quick Settings
             </Typography>
           )}
-          <Box display="flex" justifyContent="center" gap={1} flexWrap="wrap">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            gap={2}
+          >
             {/* Notifications */}
             <Tooltip title="Notifications" placement="top">
               <IconButton>
                 <NotificationsIcon />
               </IconButton>
             </Tooltip>
-
-           
 
             {/* Logout */}
             {user && (

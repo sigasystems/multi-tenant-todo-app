@@ -1,4 +1,4 @@
-import React, { useContext, useState, Fragment } from "react";
+import React, { useContext, useState, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   EyeIcon,
@@ -18,6 +18,7 @@ import { TenantRequestContext } from "../../context/TenantRequestContext";
 import { AuthContext } from "../../context/AuthContext";
 import { tenantApi } from "../../services/tenantAdminAPI";
 import { useNavigate } from "react-router-dom";
+import PaginationComponent from "../../components/PaginationComponent";
 
 // 🔹 Utility for date formatting
 const formatDate = (dateString) => {
@@ -33,20 +34,63 @@ const useUsersList = () => {
   const { tenantUsers, tenantId, fetchTenantUsers, loadingUsers, errorUsers } =
     useContext(TenantRequestContext);
   const { user } = useContext(AuthContext);
+  const [tenants, setTenants] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [filterValue, setFilterValue] = useState("all");
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const [actionLoading, setActionLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
+  const [currentTab, setCurrentTab] = useState(0);
+  const filteredTenants = tenants.filter(
+    (t) =>
+      (statusFilter === "all" || t.status === statusFilter) &&
+      (t.tenant_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.requester?.email?.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [viewOpen, setViewOpen] = useState(false);
   const [snack, setSnack] = useState({ open: false, type: "", msg: "" });
+
+  const getTabContent = () => {
+    switch (currentTab) {
+      case 0: // All Tenants
+        return filteredTenants;
+      case 1: // Pending Requests
+        return tenants.filter((t) => t.status === "pending");
+      case 2: // Recent Activity
+        return tenants
+          .slice()
+          .sort(
+            (a, b) =>
+              new Date(b.reviewed_at || b.requested_at) -
+              new Date(a.reviewed_at || a.requested_at)
+          )
+          .slice(0, 10);
+      default:
+        return filteredTenants;
+    }
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const tenantsPerPage = 5; // you can change this
+
+  // ✅ Paginate data
+  const tenantsToDisplay = getTabContent().slice(
+    (currentPage - 1) * tenantsPerPage,
+    currentPage * tenantsPerPage
+  );
+
+  // Reset to page 1 when filter/search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, currentTab]);
 
   const showSnack = (type, msg) => {
     setSnack({ open: true, type, msg });
@@ -191,112 +235,110 @@ const ViewUserDialog = ({ open, setOpen, user }) => {
         </Transition.Child>
 
         <div className="fixed inset-0 z-50 overflow-y-auto">
-  <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-    <Transition.Child
-      as={Fragment}
-      enter="ease-out duration-300"
-      enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      enterTo="opacity-100 translate-y-0 sm:scale-100"
-      leave="ease-in duration-200"
-      leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-      leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-    >
-      <Dialog.Panel className="relative transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-        
-        {/* Close Button */}
-        <div className="absolute top-4 right-4">
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="rounded-md bg-white p-1 text-gray-400 hover:text-gray-600 transition"
-          >
-            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <Dialog.Panel className="relative transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                {/* Close Button */}
+                <div className="absolute top-4 right-4">
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="rounded-md bg-white p-1 text-gray-400 hover:text-gray-600 transition"
+                  >
+                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                </div>
 
-        {/* Header */}
-        <div className="text-center px-6 pt-6">
-          <EyeIcon className="mx-auto h-12 w-12 text-blue-600 mb-4" />
-          <Dialog.Title
-            as="h3"
-            className="text-xl font-bold leading-6 text-gray-900 mb-1"
-          >
-            User Details
-          </Dialog.Title>
-          <p className="text-gray-500 text-sm">
-            View detailed information about the selected user.
-          </p>
-        </div>
+                {/* Header */}
+                <div className="text-center px-6 pt-6">
+                  <EyeIcon className="mx-auto h-12 w-12 text-blue-600 mb-4" />
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-bold leading-6 text-gray-900 mb-1"
+                  >
+                    User Details
+                  </Dialog.Title>
+                  <p className="text-gray-500 text-sm">
+                    View detailed information about the selected user.
+                  </p>
+                </div>
 
-        {/* Content */}
-        <div className="px-6 mt-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
-            
-            {/* Name */}
-            <div>
-              <p className="font-semibold">Name</p>
-              <p className="text-gray-900">{user.email.split("@")[0]}</p>
-            </div>
+                {/* Content */}
+                <div className="px-6 mt-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+                    {/* Name */}
+                    <div>
+                      <p className="font-semibold">Name</p>
+                      <p className="text-gray-900">
+                        {user.email.split("@")[0]}
+                      </p>
+                    </div>
 
-            {/* Email */}
-            <div>
-              <p className="font-semibold">Email</p>
-              <p className="text-gray-900">{user.email || "N/A"}</p>
-            </div>
+                    {/* Email */}
+                    <div>
+                      <p className="font-semibold">Email</p>
+                      <p className="text-gray-900">{user.email || "N/A"}</p>
+                    </div>
 
-            {/* Role */}
-            <div>
-              <p className="font-semibold">Role</p>
-              <p className="text-gray-900 capitalize">{user.role || "N/A"}</p>
-            </div>
+                    {/* Role */}
+                    <div>
+                      <p className="font-semibold">Role</p>
+                      <p className="text-gray-900 capitalize">
+                        {user.role || "N/A"}
+                      </p>
+                    </div>
 
-            {/* Status */}
-            <div>
-              <p className="font-semibold">Status</p>
-              {user.is_deleted ? (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                  Deleted
-                </span>
-              ) : user.is_active ? (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                  Active
-                </span>
-              ) : (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                  Inactive
-                </span>
-              )}
-            </div>
+                    {/* Status */}
+                    <div>
+                      <p className="font-semibold">Status</p>
+                      {user.is_deleted ? (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                          Deleted
+                        </span>
+                      ) : user.is_active ? (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                          Inactive
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-            
+                  {/* Optional Notes */}
+                  {user.notes && (
+                    <div className="mt-6">
+                      <p className="font-semibold text-gray-700 mb-1">Notes</p>
+                      <div className="bg-gray-50 p-4 rounded-lg text-gray-800 text-sm">
+                        {user.notes}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="px-6 py-4 mt-6 border-t border-gray-200 flex justify-end space-x-3">
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
+                  >
+                    Close
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
-
-          {/* Optional Notes */}
-          {user.notes && (
-            <div className="mt-6">
-              <p className="font-semibold text-gray-700 mb-1">Notes</p>
-              <div className="bg-gray-50 p-4 rounded-lg text-gray-800 text-sm">
-                {user.notes}
-              </div>
-            </div>
-          )}
         </div>
-
-        {/* Actions */}
-        <div className="px-6 py-4 mt-6 border-t border-gray-200 flex justify-end space-x-3">
-          <button
-            onClick={() => setOpen(false)}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
-          >
-            Close
-          </button>
-        </div>
-
-      </Dialog.Panel>
-    </Transition.Child>
-  </div>
-</div>
-
       </Dialog>
     </Transition.Root>
   );
@@ -305,7 +347,7 @@ const ViewUserDialog = ({ open, setOpen, user }) => {
 // 🔹 Main Component
 const UsersList = () => {
   const navigate = useNavigate();
-  const { tenantDetails } = useContext(TenantRequestContext);
+  const { tenantDetails, userStats } = useContext(TenantRequestContext);
   const {
     searchTerm,
     setSearchTerm,
@@ -346,17 +388,25 @@ const UsersList = () => {
   };
 
   const statusOptions = [
-    { value: "all", label: "All Users" },
-    { value: "active", label: "Active Users" },
-    { value: "inactive", label: "Inactive Users" },
-    { value: "deleted", label: "Deleted Users" },
+    { value: "all", label: `All Users (${userStats.totalUsers || 0})` },
+    {
+      value: "active",
+      label: `Active Users (${userStats.byStatus?.active || 0})`,
+    },
+    {
+      value: "inactive",
+      label: `Inactive Users (${userStats.byStatus?.inactive || 0})`,
+    },
+    {
+      value: "deleted",
+      label: `Deleted Users (${userStats.byStatus?.deleted || 0})`,
+    },
   ];
 
   const sortableColumns = [
     { field: "name", label: "Name" },
     { field: "email", label: "Email" },
     { field: "createdAt", label: "Created Date" },
-    { field: "updatedAt", label: "Updated Date" },
   ];
 
   const actionName = {
@@ -476,31 +526,47 @@ const UsersList = () => {
                       key={u.id}
                       className="hover:bg-gray-50 transition-colors duration-150"
                     >
+                      {/* Name */}
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        {u.name ||  u.email.split("@")[0]}
+                        {u.name || u.email.split("@")[0]}
                       </td>
+
+                      {/* Email */}
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {u.email}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDate(u.createdAt)}
+                      {/* ✅ Professional Status Badge */}
+                      <td className="px-6 py-4 text-sm whitespace-nowrap">
+                        {u.is_deleted ? (
+                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Deleted
+                          </span>
+                        ) : u.is_active ? (
+                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Inactive
+                          </span>
+                        )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDate(u.updatedAt)}
-                      </td>
+                      {/* ✅ Actions */}
                       <td className="px-6 py-4 text-right text-sm font-medium">
                         <div className="flex justify-end space-x-2">
+                          {/* View */}
                           <button
                             onClick={() => handleOpenView(u)}
-                            className="cursor-pointer p-2 text-blue-600 hover:bg-blue-50 rounded-full"
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
                             title="View Details"
                           >
                             <EyeIcon className="w-5 h-5" />
                           </button>
+                          {/* Deactivate / Restore */}
                           {u.is_active && !u.is_deleted && (
                             <button
                               onClick={() => handleOpenConfirm(u, "deactivate")}
-                              className="cursor-pointer p-2 text-yellow-600 hover:bg-yellow-50 rounded-full"
+                              className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-full"
                               title="Deactivate"
                             >
                               <UserMinusIcon className="w-5 h-5" />
@@ -509,18 +575,20 @@ const UsersList = () => {
                           {!u.is_active && !u.is_deleted && (
                             <button
                               onClick={() => handleOpenConfirm(u, "restore")}
-                              className="cursor-pointer p-2 text-green-600 hover:bg-green-50 rounded-full"
+                              className="p-2 text-green-600 hover:bg-green-50 rounded-full"
                               title="Restore"
                             >
                               <UserPlusIcon className="w-5 h-5" />
                             </button>
                           )}
+
+                          {/* Delete */}
                           {!u.is_deleted && (
                             <button
                               onClick={() =>
                                 handleOpenConfirm(u, "soft-delete")
                               }
-                              className="cursor-pointer p-2 text-red-600 hover:bg-red-50 rounded-full"
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-full"
                               title="Delete"
                             >
                               <TrashIcon className="w-5 h-5" />
@@ -534,7 +602,7 @@ const UsersList = () => {
                   <tr>
                     <td
                       colSpan="5"
-                      className="cursor-pointer px-6 py-12 text-center text-gray-500 text-lg"
+                      className="px-6 py-12 text-center text-gray-500 text-lg"
                     >
                       No users found.
                     </td>
@@ -546,43 +614,12 @@ const UsersList = () => {
         )}
       </div>
 
-      {/* Pagination */}
-      {paginatedUsers.length > 0 && totalPages > 1 && (
-        <div className="flex justify-center mt-6">
-          <nav
-            className="inline-flex rounded-md shadow-sm -space-x-px"
-            aria-label="Pagination"
-          >
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-              disabled={currentPage === 1}
-              className="cursor-pointer px-3 py-2 border rounded-l-md text-sm disabled:opacity-50 hover:bg-gray-100"
-            >
-              Prev
-            </button>
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`px-4 py-2 border text-sm ${
-                  currentPage === i + 1
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="cursor-pointer px-3 py-2 border rounded-r-md text-sm disabled:opacity-50 hover:bg-gray-100"
-            >
-              Next
-            </button>
-          </nav>
-        </div>
-      )}
+      {/* ✅ Pagination Below Table */}
+      <PaginationComponent
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
 
       {/* Snackbar */}
       <Transition
@@ -696,7 +733,11 @@ const UsersList = () => {
       </Transition.Root>
 
       {/* View User Dialog */}
-      <ViewUserDialog open={viewOpen} setOpen={setViewOpen} user={selectedUser} />
+      <ViewUserDialog
+        open={viewOpen}
+        setOpen={setViewOpen}
+        user={selectedUser}
+      />
     </div>
   );
 };
