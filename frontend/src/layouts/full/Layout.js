@@ -58,7 +58,7 @@ const Layout = () => {
       <Sidebar takerole={user.role} />
 
       {/* Mobile Sidebar */}
-      <Drawer
+      {/* <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}
@@ -69,7 +69,7 @@ const Layout = () => {
         }}
       >
         <Sidebar takerole={role} />
-      </Drawer>
+      </Drawer> */}
       {/* Main content area */}
       <Box component="main" sx={{ flexGrow: 1 }}>
         {/* Top AppBar */}

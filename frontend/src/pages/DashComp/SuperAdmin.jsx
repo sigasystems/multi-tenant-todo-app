@@ -100,25 +100,27 @@ const Toast = ({ message, type, onClose }) => {
 };
 
 // Stats Card Component
-const StatsCard = ({ title, value, icon: Icon, gradient, change, changeType }) => (
-  <div className={`${gradient} rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}>
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-white/80 text-sm font-medium">{title}</p>
-        <p className="text-3xl font-bold mt-2">{value}</p>
-        {change && (
-          <div className={`flex items-center mt-2 text-sm ${changeType === 'increase' ? 'text-green-200' : 'text-red-200'}`}>
+const StatsCard = ({ title, value, icon: Icon, gradient, change, changeType,textColor, border }) => {
+  return (
+    <div className={`p-6 rounded-lg shadow-sm ${gradient} ${border}`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-gray-500">{title}</p>
+          <h3 className={`text-2xl font-semibold ${textColor}`}>{value}</h3>
+          {change && (
+          <div className={`flex items-center mt-2 text-sm ${changeType === 'increase' ? 'text-black-200' : 'text-red-200'}`}>
             <MdTrendingUp size={16} className="mr-1" />
             <span>{change}% from last month</span>
           </div>
         )}
-      </div>
-      <div className="bg-white/20 rounded-2xl p-4">
-        <Icon size={32} />
+        </div>
+        <div className="p-3 bg-gray-100 rounded-full">
+          <Icon className="w-6 h-6 text-gray-600" />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Status Badge Component
 const StatusBadge = ({ status }) => {
@@ -320,39 +322,43 @@ const SuperAdminDashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatsCard
-            title="Total Tenants"
-            value={tenants.length}
-            icon={MdBusiness}
-            gradient="bg-gradient-to-br from-blue-500 to-blue-600"
-            change="12"
-            changeType="increase"
-          />
-          <StatsCard
-            title="Approved"
-            value={totalApproved}
-            icon={MdCheckCircle}
-            gradient="bg-gradient-to-br from-green-500 to-green-600"
-            change="8"
-            changeType="increase"
-          />
-          <StatsCard
-            title="Pending"
-            value={totalPending}
-            icon={MdPending}
-            gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
-            change="5"
-            changeType="decrease"
-          />
-          <StatsCard
-            title="Rejected"
-            value={totalRejected}
-            icon={MdCancel}
-            gradient="bg-gradient-to-br from-red-500 to-red-600"
-            change="3"
-            changeType="decrease"
-          />
-        </div>
+  <StatsCard
+    title="Total Tenants"
+    value={tenants.length}
+    icon={MdBusiness}
+    gradient="bg-white"
+    change="12"
+    textColor="text-gray-900"
+    border="border border-gray-200"
+  />
+  <StatsCard
+    title="Approved"
+    value={totalApproved}
+    icon={MdCheckCircle}
+    gradient="bg-white"
+     change="8"
+    textColor="text-gray-900"
+    border="border border-gray-200"
+  />
+  <StatsCard
+    title="Pending"
+    value={totalPending}
+    icon={MdPending}
+    gradient="bg-white"
+     change="5"
+    textColor="text-gray-900"
+    border="border border-gray-200"
+  />
+  <StatsCard
+    title="Rejected"
+    value={totalRejected}
+    icon={MdCancel}
+    gradient="bg-white"
+     change="3"
+    textColor="text-gray-900"
+    border="border border-gray-200"
+  />
+</div>
 
         {/* Search and Filters */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">

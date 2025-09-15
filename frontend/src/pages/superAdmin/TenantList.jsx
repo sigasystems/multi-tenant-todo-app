@@ -84,7 +84,6 @@ const CustomModal = ({
 const FilterDropdown = ({ filter, setFilter, counts }) => {
   const [isOpen, setIsOpen] = useState(false);
 const{pendingRequests} = useContext(TenantRequestContext);
-console.log(pendingRequests)
   const filterOptions = [
     {
       value: "all",
@@ -444,7 +443,6 @@ const TenantList = () => {
 
       setTenants(tenantsWithDefaults);
     } catch (err) {
-      console.error("Failed to fetch tenants:", err);
       showToast("Failed to fetch tenants.", "error");
     } finally {
       setLoading(false);
@@ -477,7 +475,6 @@ const TenantList = () => {
 
 
   const { pendingRequests,superAdminId } = useContext(TenantRequestContext);
-console.log(pendingRequests)
 
 const filteredTenants =
   filter === "pending"
@@ -568,7 +565,6 @@ const filteredTenants =
   window.location.reload();
 }, 2000);
     } catch (err) {
-      console.error(err);
       showToast("Action failed. Please try again.", "error");
     } finally {
           setConfirmLoading(false); // Stop loading
