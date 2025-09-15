@@ -39,10 +39,10 @@ export const tenantApi = {
     }),
      // ✅ New APIs for user management
   activateUser: (userId, token) =>
-    apiRequest(`/tenant-requests/tenant-users/${userId}/activate`, "PUT", null, token),
+    apiRequest(`/tenant-requests/tenant-users/activate/${userId}`, "PUT", null, token),
 
   deactivateUser: (userId, token) =>
-    apiRequest(`/tenant-requests/tenant-users/${userId}/deactivate`, "PUT", null, token),
+    apiRequest(`/tenant-requests/tenant-users/deactivate/${userId}`, "PUT", null, token),
 
   softDeleteUser: (userId, token) =>
     apiRequest(`/tenant-requests/tenant-users/${userId}`, "DELETE", null, token),
