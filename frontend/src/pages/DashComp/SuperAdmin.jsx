@@ -405,7 +405,7 @@ const SuperAdminDashboard = () => {
         </div>
 
         {/* Tabs */}
-        =<div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
       <div className="p-6">
         {currentTab === 3 ? (
           // 🔹 Analytics Tab

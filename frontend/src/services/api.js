@@ -21,13 +21,13 @@ async function apiRequest(endpoint, method = "GET", body = null, headers = {}) {
 }
 
 export const authApi = {
-  login: (credentials) => apiRequest("/api/auth/login", "POST", credentials),
+  login: (credentials) => apiRequest("/auth/login", "POST", credentials),
   forgotPassword: (email) =>
-    apiRequest("/api/auth/change-password", "POST", { email }),
+    apiRequest("/auth/change-password", "POST", { email }),
   resetPassword: (token, newPassword) =>
-    apiRequest(`/api/auth/reset-password/${token}`, "POST", { newPassword }),
+    apiRequest(`/auth/reset-password/${token}`, "POST", { newPassword }),
   // CHANGE PASSWORD (requires Authorization: Bearer <token>)
   changePassword: (newPassword) =>
-    apiRequest("/api/auth/change-password", "PATCH", { newPassword }),
+    apiRequest("/auth/change-password", "PATCH", { newPassword }),
 };
 

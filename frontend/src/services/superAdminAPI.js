@@ -42,6 +42,6 @@ export const superAdmin = {
   // Soft delete a tenant request
   softDelete: (id) => apiRequest(`/tenant-requests/${id}`, "DELETE"),
   // Restore a soft-deleted tenant request
-  activate: (id) => apiRequest(`/tenant-requests/${id}/activate`, "PUT"),
-  deactive: (id) => apiRequest(`/tenant-requests/${id}/deactivate`, "PUT"),
+  activate: (id) => apiRequest(`/tenant-requests/activate/${id}`, "PUT"),
+  deactive: (id) => apiRequest(`/tenant-requests/deactivate/${id}`, "PUT"),
 };
