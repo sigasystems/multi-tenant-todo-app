@@ -46,7 +46,7 @@ const CustomModal = ({
 }) => {
   if (!open) return null;
 
-  const sizeClasses = {
+  const sizeClasses = { 
     sm: "max-w-sm",
     md: "max-w-md",
     lg: "max-w-lg",
@@ -601,8 +601,8 @@ const filteredTenants =
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-50 p-2">
+      <div className=" mx-auto sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
           <div>

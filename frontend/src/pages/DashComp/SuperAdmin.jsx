@@ -23,7 +23,7 @@ import {
   MdError,
 } from 'react-icons/md';
 import PaginationComponent from "../../components/PaginationComponent";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, useMediaQuery, useTheme, } from "@mui/material";
 
 // Custom Modal Component
 const Modal = ({ isOpen, onClose, title, children, actions }) => {
@@ -162,6 +162,8 @@ const StatusBadge = ({ status }) => {
 
 const SuperAdminDashboard = () => {
   const { user } = useContext(AuthContext);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [tenants, setTenants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -291,9 +293,9 @@ const SuperAdminDashboard = () => {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="bg-blue-600 rounded-2xl p-3">
+              {!isMobile && <div className="bg-blue-600 rounded-2xl p-3">
                 <MdDashboard size={32} className="text-white" />
-              </div>
+              </div>}
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Super Admin Dashboard</h1>
                 <p className="text-gray-600">Welcome back, {user?.name || "Admin"}! Monitor tenant requests in real-time.</p>

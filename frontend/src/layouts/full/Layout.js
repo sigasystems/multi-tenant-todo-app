@@ -53,9 +53,9 @@ const Layout = () => {
   ];
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: { xs: "block", md: "flex" },}}>
       {/* Desktop Sidebar */}
-      <Sidebar takerole={user.role} />
+      <Sidebar takerole={user.role}  mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}/>
 
       {/* Mobile Sidebar */}
       {/* <Drawer
@@ -146,7 +146,7 @@ const Layout = () => {
           
         </AppBar>
 
-        <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: "#f9f9f9" }}>
+        <Box sx={{ p: {sm: 3 }, minHeight: "100vh", backgroundColor: "#f9f9f9" }}>
           <Outlet /> 
         </Box>
         

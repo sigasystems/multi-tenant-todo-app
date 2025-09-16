@@ -1,17 +1,25 @@
 import React from "react";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const maxVisible = isMobile ? 2 : 5;
+
   if (totalPages <= 1) return null;
 
-  // Limit visible page numbers (e.g., show 5 max at a time)
+  // Calculate visible pages
   const getVisiblePages = () => {
-    const maxVisible = 5;
-    if (totalPages <= maxVisible) return [...Array(totalPages).keys()].map((n) => n + 1);
+    if (totalPages <= maxVisible)
+      return [...Array(totalPages).keys()].map((n) => n + 1);
 
-    let start = Math.max(1, currentPage - 2);
+    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(totalPages, start + maxVisible - 1);
 
-    if (end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+    if (end - start < maxVisible - 1)
+      start = Math.max(1, end - maxVisible + 1);
 
     return [...Array(end - start + 1).keys()].map((n) => n + start);
   };
