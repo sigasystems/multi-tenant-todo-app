@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }) => {
   sessionStorage.removeItem("tenantId");
   sessionStorage.removeItem("user");
   sessionStorage.removeItem("token");
+  sessionStorage.removeItem("hasReloaded")
 };
 
 // Control dialog
