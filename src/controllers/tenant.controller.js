@@ -481,7 +481,7 @@ export const getUsersByTenant = async (req, res) => {
     // 2. Fetch users excluding tenantAdmin
     const users = await User.findAll({
       where: { tenant_id: tenant.id},
-      attributes: ["id", "email","is_active", "is_deleted"],
+      attributes: ["id", "email","is_active", "is_deleted", "createdAt", "updatedAt"],
       include: [
         {
           model: Role,
