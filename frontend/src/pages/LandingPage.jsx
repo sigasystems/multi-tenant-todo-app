@@ -1097,3 +1097,409 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import {
+//   ChevronRight,
+//   Menu,
+//   X,
+//   Shield,
+//   Users,
+//   Zap,
+//   TrendingUp,
+//   Star,
+//   Check,
+//   ArrowRight,
+//   Globe,
+//   BarChart3,
+//   Lock,
+//   Rocket,
+//   Play,
+//   Award,
+//   Building,
+//   Sparkles,
+//   Target,
+// } from 'lucide-react';
+// import { motion } from 'framer-motion';
+// import e from 'cors';
+
+// const LandingPage = () => {
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+//   const [scrolled, setScrolled] = useState(false);
+
+//   useEffect(() => {
+//     const handleScroll = () => setScrolled(window.scrollY > 50);
+//     window.addEventListener('scroll', handleScroll);
+//     return () => window.removeEventListener('scroll', handleScroll);
+//   }, []);
+
+//   const features = [
+//     {
+//       icon: <Building className="w-8 h-8" />,
+//       title: 'Multi-Tenant Architecture',
+//       description:
+//         'Secure, isolated workspaces for each organization with full customization options.',
+//     },
+//     {
+//       icon: <Shield className="w-8 h-8" />,
+//       title: 'Enterprise Security',
+//       description:
+//         'SSO, SOC2, GDPR, HIPAA compliance with bank-level encryption built-in.',
+//     },
+//     {
+//       icon: <Zap className="w-8 h-8" />,
+//       title: 'Lightning Performance',
+//       description:
+//         'Global CDN, edge caching, and optimized databases for sub-second response times.',
+//     },
+//     {
+//       icon: <Users className="w-8 h-8" />,
+//       title: 'Collaboration First',
+//       description:
+//         'Real-time sync, shared dashboards, team chat, and smart notifications.',
+//     },
+//     {
+//       icon: <BarChart3 className="w-8 h-8" />,
+//       title: 'Analytics & Insights',
+//       description:
+//         'Customizable dashboards powered by AI with actionable business intelligence.',
+//     },
+//     {
+//       icon: <Globe className="w-8 h-8" />,
+//       title: 'Global Scale',
+//       description:
+//         'Elastic infrastructure that scales automatically to millions of users worldwide.',
+//     },
+//   ];
+
+//   const stats = [
+//     { number: '500K+', label: 'Active Users', icon: <Users className="w-6 h-6" /> },
+//     { number: '99.9%', label: 'Uptime SLA', icon: <TrendingUp className="w-6 h-6" /> },
+//     { number: '150+', label: 'Countries', icon: <Globe className="w-6 h-6" /> },
+//     { number: '4.9/5', label: 'User Rating', icon: <Star className="w-6 h-6" /> },
+//   ];
+
+//   const pricingPlans = [
+//     {
+//       name: 'Starter',
+//       price: 'Free',
+//       description: 'For small teams exploring our platform',
+//       features: ['5 team members', '10GB storage', 'Email support', 'Basic analytics'],
+//       cta: 'Get Started',
+//     },
+//     {
+//       name: 'Professional',
+//       price: '$29/user/mo',
+//       description: 'Advanced features for scaling teams',
+//       features: [
+//         'Unlimited members',
+//         '100GB storage/user',
+//         'Priority support',
+//         'Custom integrations',
+//       ],
+//       cta: 'Start Free Trial',
+//       popular: true,
+//     },
+//     {
+//       name: 'Enterprise',
+//       price: 'Custom',
+//       description: 'Custom solutions for enterprises',
+//       features: [
+//         'Dedicated infra',
+//         '24/7 phone support',
+//         'Custom SLAs',
+//         'Advanced compliance',
+//       ],
+//       cta: 'Contact Sales',
+//     },
+//   ];
+
+//   return (
+//     <div className="min-h-screen bg-white">
+//       {/* Navbar */}
+//       <nav
+//         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+//           scrolled ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-transparent'
+//         }`}
+//       >
+//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//           <div className="flex justify-between h-16 items-center">
+//             <div className="flex items-center space-x-2">
+//               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+//                 <Sparkles className="w-5 h-5 text-white" />
+//               </div>
+//               <span className="font-bold text-xl text-gray-900">MultiTenant</span>
+//             </div>
+//             <div className="hidden md:flex space-x-8 items-center">
+//               {['Features', 'Pricing', 'Customers', 'Resources'].map((item) => (
+//                 <button
+//                   key={item}
+//                   className="text-gray-600 hover:text-blue-600 text-sm font-medium"
+//                 >
+//                   {item}
+//                 </button>
+//               ))}
+//               <button className="text-gray-600 hover:text-blue-600">Sign In</button>
+//               <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-2 rounded-lg hover:shadow-lg font-medium">
+//                 Get Started
+//               </button>
+//             </div>
+//             <div className="md:hidden">
+//               <button
+//                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+//                 className="p-2 text-gray-700"
+//               >
+//                 {mobileMenuOpen ? <X /> : <Menu />}
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       </nav>
+
+//       {/* Hero Section */}
+//       <section className="pt-32 pb-20 bg-gradient-to-br from-blue-50 to-purple-50 relative overflow-hidden">
+//         <div className="max-w-7xl mx-auto px-4 text-center">
+//           <motion.div
+//             initial={{ opacity: 0, y: 40 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.6 }}
+//           >
+//             <div className="inline-flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full mb-8">
+//               <Award className="w-4 h-4 mr-2" /> Trusted by 500K+ users
+//             </div>
+//             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight mb-6">
+//               Scale Your SaaS <br />
+//               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+//                 Without Limits
+//               </span>
+//             </h1>
+//             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+//               The most advanced multi-tenant SaaS platform. Secure, scalable, and designed for
+//               the future of work.
+//             </p>
+//             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+//               <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl flex items-center justify-center">
+//                 Start Free Trial <ChevronRight className="ml-2 w-5 h-5" />
+//               </button>
+//               <button className="flex items-center text-gray-700 hover:text-blue-600">
+//                 <Play className="mr-2 w-6 h-6 text-blue-600" /> Watch Demo
+//               </button>
+//             </div>
+//           </motion.div>
+
+//           {/* Dashboard Preview */}
+//           <motion.div
+//             initial={{ opacity: 0, y: 50 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ delay: 0.3, duration: 0.8 }}
+//             className="mt-20 bg-white rounded-2xl shadow-2xl overflow-hidden"
+//           >
+//             <div className="grid md:grid-cols-2 gap-0">
+//               <div className="p-8 flex flex-col justify-center bg-gray-50">
+//                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
+//                   Powerful Analytics Dashboard
+//                 </h3>
+//                 <p className="text-gray-600 mb-6">
+//                   Get real-time insights into tenant usage, performance, and growth metrics with
+//                   customizable reports.
+//                 </p>
+//                 <ul className="space-y-3 text-gray-700">
+//                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Tenant-level usage</li>
+//                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Revenue analytics</li>
+//                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Growth trends</li>
+//                 </ul>
+//               </div>
+//               <div className="p-8 bg-gradient-to-br from-blue-100 via-white to-purple-100 flex items-center justify-center">
+//                 <div className="w-full max-w-sm bg-white shadow-lg rounded-xl p-6">
+//                   <h4 className="font-semibold mb-4">Sample Dashboard</h4>
+//                   <div className="h-40 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg mb-4"></div>
+//                   <div className="grid grid-cols-3 gap-4 text-center">
+//                     <div>
+//                       <p className="text-2xl font-bold text-gray-900">120K</p>
+//                       <p className="text-sm text-gray-600">Active Tenants</p>
+//                     </div>
+//                     <div>
+//                       <p className="text-2xl font-bold text-gray-900">$2.3M</p>
+//                       <p className="text-sm text-gray-600">MRR</p>
+//                     </div>
+//                     <div>
+//                       <p className="text-2xl font-bold text-gray-900">98%</p>
+//                       <p className="text-sm text-gray-600">Retention</p>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </motion.div>
+//         </div>
+//       </section>
+
+//       {/* Features */}
+//       <section id="features" className="py-24 bg-white">
+//         <div className="max-w-7xl mx-auto px-4">
+//           <div className="text-center mb-20">
+//             <h2 className="text-4xl md:text-5xl font-bold mb-6">Features Built to Scale</h2>
+//             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+//               Every feature you need to grow securely, performantly, and collaboratively.
+//             </p>
+//           </div>
+//           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+//             {features.map((f, i) => (
+//               <motion.div
+//                 key={i}
+//                 whileHover={{ y: -6 }}
+//                 className="p-8 rounded-2xl shadow-lg hover:shadow-2xl bg-white border border-gray-100"
+//               >
+//                 <div className="mb-6 p-3 rounded-xl bg-blue-50 text-blue-600 inline-flex">
+//                   {f.icon}
+//                 </div>
+//                 <h3 className="font-bold text-xl mb-3">{f.title}</h3>
+//                 <p className="text-gray-600">{f.description}</p>
+//               </motion.div>
+//             ))}
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Pricing */}
+//       <section id="pricing" className="py-24 bg-gradient-to-b from-gray-50 to-white">
+//         <div className="max-w-7xl mx-auto px-4 text-center">
+//           <h2 className="text-4xl md:text-5xl font-bold mb-6">Transparent Pricing</h2>
+//           <p className="text-lg text-gray-600 mb-16">Start free, scale as you grow.</p>
+//           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+//             {pricingPlans.map((plan, i) => (
+//               <div
+//                 key={i}
+//                 className={`p-8 rounded-2xl shadow-lg bg-white border relative ${
+//                   plan.popular ? 'ring-2 ring-blue-500 scale-105' : ''
+//                 }`}
+//               >
+//                 {plan.popular && (
+//                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+//                     <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+//                       Most Popular
+//                     </span>
+//                   </div>
+//                 )}
+//                 <h3 className="font-bold text-2xl mb-4">{plan.name}</h3>
+//                 <p className="text-3xl font-bold mb-4">{plan.price}</p>
+//                 <p className="text-gray-600 mb-6">{plan.description}</p>
+//                 <ul className="space-y-3 text-gray-700 mb-8 text-left">
+//                   {plan.features.map((f, idx) => (
+//                     <li key={idx} className="flex items-center">
+//                       <Check className="w-5 h-5 text-green-500 mr-2" /> {f}
+//                     </li>
+//                   ))}
+//                 </ul>
+//                 <button
+//                   className={`w-full py-3 rounded-xl font-semibold transition-all ${
+//                     plan.popular
+//                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+//                       : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+//                   }`}
+//                 >
+//                   {plan.cta}
+//                 </button>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* CTA */}
+//       <section className="py-24 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-center text-white">
+//         <div className="max-w-3xl mx-auto px-4">
+//           <h2 className="text-4xl md:text-5xl font-bold mb-6">
+//             Ready to Transform Your SaaS?
+//           </h2>
+//           <p className="text-lg mb-12">
+//             Start your free trial today and see why thousands of teams trust MultiTenant.
+//           </p>
+//           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+//             <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:shadow-xl">
+//               Start Free Trial <Rocket className="ml-2 inline w-5 h-5" />
+//             </button>
+//             <button className="border border-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10">
+//               Schedule Demo
+//             </button>
+//           </div>
+//         </div>
+//       </section>
+
+     
+               
+
+//       {/* Footer */}
+//       <footer className="bg-gray-900 text-white py-16">
+//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//           <div className="grid md:grid-cols-4 gap-8 mb-12">
+//             {/* Company Info */}
+//             <div>
+//               <div className="flex items-center space-x-2 mb-6">
+//                 <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+//                   <Sparkles className="w-5 h-5 text-white" />
+//                 </div>
+//                 <span className="text-xl font-bold">MultiTenant</span>
+//               </div>
+//               <p className="text-gray-400 mb-6 leading-relaxed">
+//                 Building the future of multi-tenant SaaS platforms. Secure, scalable, and built for modern businesses.
+//               </p>
+//               <div className="flex space-x-4">
+//                 {['Twitter', 'LinkedIn', 'GitHub'].map((social) => (
+//                   <button key={social} className="w-10 h-10 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors">
+//                     <span className="text-xs">{social[0]}</span>
+//                   </button>
+//                 ))}
+//               </div>
+//             </div>
+
+//             {/* Quick Links */}
+//             {[
+//               {
+//                 title: 'Product',
+//                 links: ['Features', 'Pricing', 'Security', 'Integrations', 'API Docs']
+//               },
+//               {
+//                 title: 'Company',
+//                 links: ['About', 'Careers', 'Press', 'Partners', 'Contact']
+//               },
+//               {
+//                 title: 'Resources',
+//                 links: ['Blog', 'Help Center', 'Community', 'Webinars', 'Status']
+//               }
+//             ].map((section, index) => (
+//               <div key={index}>
+//                 <h4 className="text-lg font-semibold mb-6">{section.title}</h4>
+//                 <ul className="space-y-3">
+//                   {section.links.map((link) => (
+//                     <li key={link}>
+//                       <button className="text-gray-400 hover:text-white transition-colors">
+//                         {link}
+//                       </button>
+//                     </li>
+//                   ))}
+//                 </ul>
+//               </div>
+//             ))}
+//           </div>
+
+//           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
+//             <p className="text-gray-400 text-sm mb-4 md:mb-0">
+//               © 2024 MultiTenant. All rights reserved.
+//             </p>
+//             <div className="flex items-center space-x-6 text-sm text-gray-400">
+//               <button className="hover:text-white transition-colors">Privacy Policy</button>
+//               <button className="hover:text-white transition-colors">Terms of Service</button>
+//               <button className="hover:text-white transition-colors">Cookie Policy</button>
+//             </div>
+//           </div>
+//         </div>
+//       </footer>
+//   </div>)};
+
+
+// export default LandingPage;

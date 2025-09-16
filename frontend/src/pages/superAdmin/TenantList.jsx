@@ -453,25 +453,6 @@ const TenantList = () => {
     fetchTenants();
   }, []);
 
-  // Filter tenants based on state and search query
-  // const filteredTenants = tenants.filter((t) => {
-  //   const matchesFilter =
-  //     filter === "all" ||
-  //     (filter === "active" && t.is_active && !t.is_deleted && !t.is_pending) ||
-  //     (filter === "inactive" &&
-  //       !t.is_active &&
-  //       !t.is_deleted &&
-  //       !t.is_pending) ||
-  //     (filter === "pending" && t.is_pending && !t.is_deleted) ||
-  //     (filter === "deleted" && t.is_deleted);
-
-  //   const matchesSearch =
-  //     searchQuery === "" ||
-  //     t.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     t.email?.toLowerCase().includes(searchQuery.toLowerCase());
-
-  //   return matchesFilter && matchesSearch;
-  // });
 
 
   const { pendingRequests,superAdminId } = useContext(TenantRequestContext);
@@ -501,7 +482,8 @@ const filteredTenants =
           t.email?.toLowerCase().includes(searchQuery.toLowerCase());
 
         return matchesFilter && matchesSearch;
-      });
+      })   // ⬇️ CHANGE #2: sort tenants by createdAt
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));;
 
   // Calculate counts for each filter
   const getCounts = () => {
@@ -691,10 +673,10 @@ const filteredTenants =
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Users
-                  </th>
+                  </th>  
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Created Date
-                  </th>
+                    Created At
+                  </th> 
                   <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Actions
                   </th>
@@ -734,13 +716,12 @@ const filteredTenants =
                         <div className="text-sm text-gray-500">Total users</div>
                       </td>
 
-                      {/* Created Date */}
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">
-                          {safeFormatDate(tenant.createdAt)}
-                        </div>
+                      <td>
+                        <div className="text-sm text-gray-500">
+                            {tenant.createdAt.slice(0,10)}
+                          </div>
                       </td>
-
+                     
                       {/* Actions */}
                       <td className="px-6 py-4 text-right relative">
                         <ActionDropdown
@@ -842,15 +823,7 @@ const filteredTenants =
                   <div className="mt-1">
                     <StatusBadge tenant={selectedTenant} />
                   </div>
-                </div>
-                <div>
-                  <label className="text-sm font-semibold text-gray-600">
-                    Created Date
-                  </label>
-                  <p className="text-sm text-gray-900 mt-1">
-                    {safeFormatDate(selectedTenant.createdAt)}
-                  </p>
-                </div>
+                </div>              
                 {selectedTenant.updatedAt && (
                   <div>
                     <label className="text-sm font-semibold text-gray-600">
