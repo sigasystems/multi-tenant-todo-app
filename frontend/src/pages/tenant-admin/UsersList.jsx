@@ -155,7 +155,7 @@ const useUsersList = () => {
     if (sortField === "name" || sortField === "email") {
       aVal = aVal?.toLowerCase();
       bVal = bVal?.toLowerCase();
-    } else {
+    } else if (sortField === "createdAt" || sortField === "updatedAt") {
       aVal = new Date(aVal);
       bVal = new Date(bVal);
     }
@@ -406,7 +406,6 @@ const UsersList = () => {
   const sortableColumns = [
     { field: "name", label: "Name" },
     { field: "email", label: "Email" },
-    { field: "createdAt", label: "Created Date" },
   ];
 
   const actionName = {
@@ -470,16 +469,17 @@ const UsersList = () => {
             className="col-span-1 md:col-span-2 lg:col-span-2 flex-1 border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           {/* Status filter */}
-          <Select labelId="status-select-label"
-        value={filterValue}
-        onChange={(e) => setFilterValue(e.target.value)}
-      >
-        {statusOptions.map((o) => (
-          <MenuItem key={o.value} value={o.value}>
-            {o.label}
-          </MenuItem>
-        ))}
-      </Select>
+          <Select
+            labelId="status-select-label"
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+          >
+            {statusOptions.map((o) => (
+              <MenuItem key={o.value} value={o.value}>
+                {o.label}
+              </MenuItem>
+            ))}
+          </Select>
         </div>
       </div>
 
@@ -513,6 +513,9 @@ const UsersList = () => {
                       </div>
                     </th>
                   ))}
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Status
+                  </th>
                   <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase">
                     Actions
                   </th>
@@ -520,87 +523,93 @@ const UsersList = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {paginatedUsers.length > 0 ? (
-                  paginatedUsers.map((u) => (
-                    <tr
-                      key={u.id}
-                      className="hover:bg-gray-50 transition-colors duration-150"
-                    >
-                      {/* Name */}
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        {u.name || u.email.split("@")[0]}
-                      </td>
+                  [...paginatedUsers]
+                    .sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    )
+                    .map((u) => (
+                      <tr
+                        key={u.id}
+                        className="hover:bg-gray-50 transition-colors duration-150"
+                      >
+                        {/* Name */}
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          {u.name || u.email.split("@")[0]}
+                        </td>
 
-                      {/* Email */}
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        {u.email}
-                      </td>
-                      {/* ✅ Professional Status Badge */}
-                      <td className="px-6 py-4 text-sm whitespace-nowrap">
-                        {u.is_deleted ? (
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                            Deleted
-                          </span>
-                        ) : u.is_active ? (
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Active
-                          </span>
-                        ) : (
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            Inactive
-                          </span>
-                        )}
-                      </td>
-                      {/* ✅ Actions */}
-                      <td className="px-6 py-4 text-right text-sm font-medium">
-                        <div className="flex justify-end space-x-2 cursor-pointer">
-                          {/* View */}
-                          <button
-                            onClick={() => handleOpenView(u)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full cursor-pointer"
-                            title="View Details"
-                          >
-                            <EyeIcon className="w-5 h-5" />
-                          </button>
-                          {/* Deactivate / Restore */}
-                          {u.is_active && !u.is_deleted && (
-                            <button
-                              onClick={() => handleOpenConfirm(u, "deactivate")}
-                              className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-full cursor-pointer"
-                              title="Deactivate"
-                            >
-                              <UserMinusIcon className="w-5 h-5" />
-                            </button>
+                        {/* Email */}
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          {u.email}
+                        </td>
+                        {/* ✅ Professional Status Badge */}
+                        <td className="px-6 py-4 text-sm whitespace-nowrap">
+                          {u.is_deleted ? (
+                            <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                              Deleted
+                            </span>
+                          ) : u.is_active ? (
+                            <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Active
+                            </span>
+                          ) : (
+                            <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                              Inactive
+                            </span>
                           )}
-                          {!u.is_active && !u.is_deleted && (
+                        </td>
+                        {/* ✅ Actions */}
+                        <td className="px-6 py-4 text-right text-sm font-medium">
+                          <div className="flex justify-end space-x-2 cursor-pointer">
+                            {/* View */}
                             <button
-                              onClick={() => handleOpenConfirm(u, "restore")}
-                              className="p-2 text-green-600 hover:bg-green-50 rounded-full"
-                              title="Restore"
+                              onClick={() => handleOpenView(u)}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-full cursor-pointer"
+                              title="View Details"
                             >
-                              <UserPlusIcon className="w-5 h-5" />
+                              <EyeIcon className="w-5 h-5" />
                             </button>
-                          )}
+                            {/* Deactivate / Restore */}
+                            {u.is_active && !u.is_deleted && (
+                              <button
+                                onClick={() =>
+                                  handleOpenConfirm(u, "deactivate")
+                                }
+                                className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-full cursor-pointer"
+                                title="Deactivate"
+                              >
+                                <UserMinusIcon className="w-5 h-5" />
+                              </button>
+                            )}
+                            {!u.is_active && !u.is_deleted && (
+                              <button
+                                onClick={() => handleOpenConfirm(u, "restore")}
+                                className="p-2 text-green-600 hover:bg-green-50 rounded-full"
+                                title="Restore"
+                              >
+                                <UserPlusIcon className="w-5 h-5" />
+                              </button>
+                            )}
 
-                          {/* Delete */}
-                          {!u.is_deleted && (
-                            <button
-                              onClick={() =>
-                                handleOpenConfirm(u, "soft-delete")
-                              }
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-full cursor-pointer"
-                              title="Delete"
-                            >
-                              <TrashIcon className="w-5 h-5" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            {/* Delete */}
+                            {!u.is_deleted && (
+                              <button
+                                onClick={() =>
+                                  handleOpenConfirm(u, "soft-delete")
+                                }
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-full cursor-pointer"
+                                title="Delete"
+                              >
+                                <TrashIcon className="w-5 h-5" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="5"
+                      colSpan="8"
                       className="px-6 py-12 text-center text-gray-500 text-lg"
                     >
                       No users found.
