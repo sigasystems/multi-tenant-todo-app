@@ -294,7 +294,7 @@ const Login = () => {
             md={6}
             sx={{
               flex: 1,
-              display: "flex",
+              display: { xs: "none", sm: "flex" },
               justifyContent: "center",
               alignItems: "center",
               position: "relative",

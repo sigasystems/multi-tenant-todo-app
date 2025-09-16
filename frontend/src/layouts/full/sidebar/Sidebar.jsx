@@ -16,13 +16,11 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
-  Switch,
 } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import PersonIcon from "@mui/icons-material/Person";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -37,12 +35,11 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import TenantRequestContext from "../../../context/TenantRequestContext";
-import { style } from "@mui/system";
 
 const drawerWidth = 260;
 const collapsedWidth = 80;
 
-const Sidebar = () => {
+const Sidebar = ({mobileOpen,setMobileOpen}) => {
   const { user, openLogoutDialog } = useContext(AuthContext);
   const { userStats } = useContext(TenantRequestContext);
   const location = useLocation();
@@ -130,28 +127,11 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile hamburger button */}
-      {isMobile && (
-        <IconButton
-          onClick={handleDrawerToggle}
-          sx={{
-            position: "fixed",
-            top: 16,
-            left: 16,
-            zIndex: theme.zIndex.drawer + 1,
-            bgcolor: theme.palette.background.paper,
-            boxShadow: theme.shadows[3],
-            "&:hover": { bgcolor: theme.palette.grey[200] },
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
-      )}
 
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
-        open={open}
-        onClose={handleDrawerToggle}
+        open={mobileOpen}
+        onClose={setMobileOpen}
         ModalProps={{ keepMounted: true }}
         sx={{
           width: collapsed ? collapsedWidth : drawerWidth,
@@ -164,6 +144,7 @@ const Sidebar = () => {
             transition: "width 0.3s",
             display: "flex",
             flexDirection: "column",
+            height: "100%",
           },
         }}
       >
@@ -177,6 +158,7 @@ const Sidebar = () => {
             bgcolor: theme.palette.primary.main,
             color: "white",
             cursor: "pointer",
+            overflowY: "auto",
           }}
           onClick={handleMenuOpen}
         >
@@ -203,7 +185,12 @@ const Sidebar = () => {
             size="small"
             onClick={(e) => {
               e.stopPropagation();
-              toggleCollapse();
+              if (isMobile) {
+                setMobileOpen(); // only executes on mobile
+              }else{
+                
+                    toggleCollapse();
+              }
             }}
           >
             <MenuIcon sx={{ color: "white" }} />
@@ -218,6 +205,7 @@ const Sidebar = () => {
             onClose={handleMenuClose}
             anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
             transformOrigin={{ vertical: "top", horizontal: "left" }}
+            PaperProps={{ style: { marginLeft: "80px" } }}
           >
             <MenuItem
               onClick={() => {

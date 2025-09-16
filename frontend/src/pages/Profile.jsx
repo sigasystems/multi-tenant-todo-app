@@ -88,7 +88,7 @@ const Profile = () => {
                     onChange={(e) =>
                       setProfileData({ ...profileData, name: e.target.value })
                     }
-                    className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                    className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-1"
                   />
                 </div>
 
@@ -102,7 +102,7 @@ const Profile = () => {
                     onChange={(e) =>
                       setProfileData({ ...profileData, phone: e.target.value })
                     }
-                    className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                    className="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-1"
                   />
                 </div>
 

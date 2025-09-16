@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import TenantRequestContext from "../../context/TenantRequestContext";
 import { tenantApi } from "../../services/tenantAdminAPI";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -23,6 +24,11 @@ const CreateUser = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [snack, setSnack] = useState({ open: false, type: "success", msg: "" });
+  const navigate = useNavigate();
+
+   const handleCancel = () => {
+    navigate("/dashboard"); // Navigate to dashboard
+  };
 
   const validate = () => {
     const tempErrors = {};
@@ -81,14 +87,25 @@ const CreateUser = () => {
           />
           <FormHelperText>New user will be added under this Tenant.</FormHelperText>
 
-          <Button
-            variant="contained"
-            onClick={handleAddUser}
-            disabled={loading}
-            sx={{ minWidth: 120 }}
-          >
-            {loading ? <CircularProgress size={22} color="inherit" /> : "Add User"}
-          </Button>
+           <Stack direction="row" spacing={2}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleCancel}
+              sx={{ minWidth: 100 }}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={handleAddUser}
+              disabled={loading}
+              sx={{ minWidth: 100 }}
+            >
+              {loading ? <CircularProgress size={22} color="inherit" /> : "Add User"}
+            </Button>
+          </Stack>
         </Stack>
       </Paper>
 
