@@ -1,4 +1,5 @@
 import React, { useContext, useState, Fragment, useEffect } from "react";
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   EyeIcon,
@@ -251,7 +252,7 @@ const ViewUserDialog = ({ open, setOpen, user }) => {
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="rounded-md bg-white p-1 text-gray-400 hover:text-gray-600 transition"
+                    className="rounded-md bg-white p-1 text-gray-400 hover:text-gray-600 transition cursor-pointer"
                   >
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
@@ -259,7 +260,6 @@ const ViewUserDialog = ({ open, setOpen, user }) => {
 
                 {/* Header */}
                 <div className="text-center px-6 pt-6">
-                  <EyeIcon className="mx-auto h-12 w-12 text-blue-600 mb-4" />
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold leading-6 text-gray-900 mb-1"
@@ -330,7 +330,7 @@ const ViewUserDialog = ({ open, setOpen, user }) => {
                 <div className="px-6 py-4 mt-6 border-t border-gray-200 flex justify-end space-x-3">
                   <button
                     onClick={() => setOpen(false)}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium cursor-pointer"
                   >
                     Close
                   </button>
@@ -442,7 +442,7 @@ const UsersList = () => {
         <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0">
           <button
             onClick={clearFilters}
-            className="px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition"
+            className="px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition cursor-pointer"
           >
             Clear Filters
           </button>
@@ -450,7 +450,7 @@ const UsersList = () => {
             onClick={() => navigate("/tenant-admin/createuser")}
             className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <UserPlusIcon className="w-5 h-5" />
               <span>Add New User</span>
             </div>
@@ -470,17 +470,16 @@ const UsersList = () => {
             className="col-span-1 md:col-span-2 lg:col-span-2 flex-1 border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           {/* Status filter */}
-          <select
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            {statusOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+          <Select labelId="status-select-label"
+        value={filterValue}
+        onChange={(e) => setFilterValue(e.target.value)}
+      >
+        {statusOptions.map((o) => (
+          <MenuItem key={o.value} value={o.value}>
+            {o.label}
+          </MenuItem>
+        ))}
+      </Select>
         </div>
       </div>
 
@@ -553,11 +552,11 @@ const UsersList = () => {
                       </td>
                       {/* ✅ Actions */}
                       <td className="px-6 py-4 text-right text-sm font-medium">
-                        <div className="flex justify-end space-x-2">
+                        <div className="flex justify-end space-x-2 cursor-pointer">
                           {/* View */}
                           <button
                             onClick={() => handleOpenView(u)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full cursor-pointer"
                             title="View Details"
                           >
                             <EyeIcon className="w-5 h-5" />
@@ -566,7 +565,7 @@ const UsersList = () => {
                           {u.is_active && !u.is_deleted && (
                             <button
                               onClick={() => handleOpenConfirm(u, "deactivate")}
-                              className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-full"
+                              className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-full cursor-pointer"
                               title="Deactivate"
                             >
                               <UserMinusIcon className="w-5 h-5" />
@@ -588,7 +587,7 @@ const UsersList = () => {
                               onClick={() =>
                                 handleOpenConfirm(u, "soft-delete")
                               }
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-full"
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-full cursor-pointer"
                               title="Delete"
                             >
                               <TrashIcon className="w-5 h-5" />
