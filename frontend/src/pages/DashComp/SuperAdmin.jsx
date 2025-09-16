@@ -23,6 +23,7 @@ import {
   MdError,
 } from 'react-icons/md';
 import PaginationComponent from "../../components/PaginationComponent";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 // Custom Modal Component
 const Modal = ({ isOpen, onClose, title, children, actions }) => {
@@ -377,21 +378,28 @@ const SuperAdminDashboard = () => {
                 />
               </div>
               
-              <div className="relative">
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="cursor-pointer appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="all">All Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <MdFilterList className="h-4 w-4 text-gray-400" />
-                </div>
-              </div>
+                  <FormControl
+                    variant="outlined"
+                    size="small"
+                    sx={{ minWidth: 180, position: "relative" }}
+                  >
+                    <InputLabel>Status</InputLabel>
+                    <Select
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                      label="Status"
+                      MenuProps={{
+                        PaperProps: {
+                          style: { maxHeight: 200 }, // optional dropdown height
+                        },
+                      }}
+                    >
+                      <MenuItem value="all">All Status</MenuItem>
+                      <MenuItem value="pending">Pending</MenuItem>
+                      <MenuItem value="approved">Approved</MenuItem>
+                      <MenuItem value="rejected">Rejected</MenuItem>
+                    </Select>
+              </FormControl>
             </div>
 
             <div className="flex space-x-3">

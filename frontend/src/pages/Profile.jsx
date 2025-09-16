@@ -110,13 +110,13 @@ const Profile = () => {
                 <div className="flex justify-end gap-3">
                   <button
                     onClick={() => setEditMode(false)}
-                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium"
+                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSaveProfile}
-                    className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium"
+                    className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium cursor-pointer"
                   >
                     Save Changes
                   </button>
@@ -168,13 +168,13 @@ const Profile = () => {
                 <div className="flex justify-end gap-3 mt-6">
                   <button
                     onClick={() => setEditMode(true)}
-                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium"
+                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium cursor-pointer"
                   >
                     Edit Profile
                   </button>
                   <button
                     onClick={() => navigate("/change-pass")}
-                    className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium"
+                    className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium cursor-pointer"
                   >
                     Change Password
                   </button>
