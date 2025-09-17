@@ -207,6 +207,15 @@ const SuperAdminDashboard = () => {
   }, []);
 
   useEffect(() => {
+    const hasReloaded = sessionStorage.getItem("hasReloaded");
+  
+    if (!hasReloaded) {
+      sessionStorage.setItem("hasReloaded", "true");
+      window.location.reload();
+      }
+    }, []);
+
+  useEffect(() => {
     fetchTenants();
     const interval = setInterval(fetchTenants, 100000);
     return () => clearInterval(interval);
