@@ -1,7 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { TenantRequestContext } from "../../context/TenantRequestContext";
 import { format } from "date-fns";
-import { Select, MenuItem, FormControl, useMediaQuery, useTheme, } from "@mui/material";
+import {Select,MenuItem,FormControl,useMediaQuery,useTheme,} from "@mui/material";
+import PaginationComponent from "../../components/PaginationComponent";
 
 // We'll use simple SVG icons for a pure Tailwind/React setup
 const PendingIcon = () => (
@@ -99,16 +100,14 @@ const TenantAdminDashboard = () => {
     }
   };
 
- 
- useEffect(() => {
-  const hasReloaded = sessionStorage.getItem("hasReloaded");
+  useEffect(() => {
+    const hasReloaded = sessionStorage.getItem("hasReloaded");
 
-  if (!hasReloaded) {
-    sessionStorage.setItem("hasReloaded", "true");
-    window.location.reload();
+    if (!hasReloaded) {
+      sessionStorage.setItem("hasReloaded", "true");
+      window.location.reload();
     }
   }, []);
-
 
   // Filtering Logic
   const filteredUsers = tenantUsers.filter(
@@ -251,29 +250,29 @@ const TenantAdminDashboard = () => {
                 </label>
                 <div className="relative">
                   <FormControl fullWidth>
-                      <Select
-                        labelId="status-filter-label"
-                        id="status-filter"
-                        value={statusFilter}
-                        onChange={(e) => {
-                          setStatusFilter(e.target.value);
-                          setCurrentPage(1); // Reset to first page
-                        }}
-                        MenuProps={{
-                          PaperProps: {
-                            style: {
-                              maxHeight: 180, 
-                            },
+                    <Select
+                      labelId="status-filter-label"
+                      id="status-filter"
+                      value={statusFilter}
+                      onChange={(e) => {
+                        setStatusFilter(e.target.value);
+                        setCurrentPage(1); // Reset to first page
+                      }}
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            maxHeight: 180,
                           },
-                        }}
-                        sx={{ cursor: "pointer" }} // cursor pointer on the closed select
-                      >
-                        <MenuItem value="all" sx={{ cursor: "pointer" }}>All</MenuItem>
-                        <MenuItem value="active" sx={{ cursor: "pointer" }}>Active</MenuItem>
-                        <MenuItem value="inactive" sx={{ cursor: "pointer" }}>Inactive</MenuItem>
-                        <MenuItem value="deleted" sx={{ cursor: "pointer" }}>Deleted</MenuItem>
-                      </Select>
-                    </FormControl>
+                        },
+                      }}
+                      sx={{ cursor: "pointer" }} // cursor pointer on the closed select
+                    >
+                      <MenuItem value="all" sx={{ cursor: "pointer" }}>All</MenuItem>
+                      <MenuItem value="active" sx={{ cursor: "pointer" }}>Active</MenuItem>
+                      <MenuItem value="inactive" sx={{ cursor: "pointer" }}>Inactive</MenuItem>
+                      <MenuItem value="deleted" sx={{ cursor: "pointer" }}>Deleted</MenuItem>
+                    </Select>
+                  </FormControl>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg
                       className="fill-current h-4 w-4"
@@ -310,7 +309,7 @@ const TenantAdminDashboard = () => {
                     >
                       Status
                     </th>
-                    
+
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -370,7 +369,7 @@ const TenantAdminDashboard = () => {
                             </span>
                           </span>
                         </td>
-                      
+
                       </tr>
                     ))
                   ) : (
@@ -385,72 +384,14 @@ const TenantAdminDashboard = () => {
             </div>
 
             {/* Pagination */}
-            {/* Pagination */}
-{totalPages > 1 && (
-  <div className="flex justify-between items-center mt-6">
-    {/* Prev button */}
-    <button
-      onClick={() => handlePageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
-    >
-      Prev
-    </button>
-    <div className="flex items-center space-x-2">
-      {[...Array(totalPages)].map((_, index) => {
-        const showAllPages = isMobile ? totalPages <= 2 : totalPages <= 5;
-
-        if (!showAllPages && index >= (isMobile ? 2 : 5)) return null;
-
-        return (
-          <button
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer ${
-              currentPage === index + 1
-                ? "bg-indigo-600 text-white"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-            }`}
-          >
-            {index + 1}
-          </button>
-        );
-      })}
-
-      {/* Ellipsis if needed */}
-      {totalPages > (window.innerWidth < 768 ? 2 : 5) && (
-        <span className="px-2 text-gray-500">...</span>
-      )}
-    </div>
-
-    {/* Next button */}
-    <button
-      onClick={() => handlePageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
-    >
-      Next
-    </button>
-  </div>
-)}
-
-
+            {/* ✅ Pagination Below Table */}
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
           </div>
         )}
-
-        {/* Snackbar */}
-        {/* {snackbar.open && (
-          <div
-            className={`fixed bottom-6 right-6 p-4 rounded-lg shadow-xl text-white ${
-              snackbar.severity === "success"
-                ? "bg-green-500"
-                : "bg-red-500"
-            }`}
-            role="alert"
-          >
-            {snackbar.message}
-          </div>
-        )} */}
       </div>
     </div>
   );
