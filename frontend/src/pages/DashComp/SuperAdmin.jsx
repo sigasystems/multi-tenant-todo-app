@@ -511,16 +511,14 @@ const SuperAdminDashboard = () => {
                       </tr>
                     ))}
                   </tbody>
-                </table>
-
-                {/* ✅ Pagination Below Table */}
+                </table> 
+                </div>)}
+             {/* ✅ Pagination Below Table */}
                 <PaginationComponent
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={(page) => setCurrentPage(page)}
                 />
-              </div>
-            )}
           </div>
         )}
       </div>

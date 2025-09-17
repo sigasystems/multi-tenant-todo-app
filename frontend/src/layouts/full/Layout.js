@@ -57,19 +57,7 @@ const Layout = () => {
       {/* Desktop Sidebar */}
       <Sidebar takerole={user.role}  mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}/>
 
-      {/* Mobile Sidebar */}
-      {/* <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: "block", md: "none" },
-          "& .MuiDrawer-paper": { width: 240 },
-        }}
-      >
-        <Sidebar takerole={role} />
-      </Drawer> */}
+     
       {/* Main content area */}
       <Box component="main" sx={{ flexGrow: 1 }}>
         {/* Top AppBar */}

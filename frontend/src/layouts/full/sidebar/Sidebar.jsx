@@ -31,15 +31,17 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import TenantRequestContext from "../../../context/TenantRequestContext";
+import { alignItems } from "@mui/system";
 
 const drawerWidth = 260;
-const collapsedWidth = 80;
+const collapsedWidth = 105;
 
-const Sidebar = ({mobileOpen,setMobileOpen}) => {
+const Sidebar = ({ mobileOpen, setMobileOpen }) => {
   const { user, openLogoutDialog } = useContext(AuthContext);
   const { userStats } = useContext(TenantRequestContext);
   const location = useLocation();
@@ -127,7 +129,6 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
 
   return (
     <>
-
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         open={mobileOpen}
@@ -145,57 +146,83 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
             display: "flex",
             flexDirection: "column",
             height: "100%",
+            alignItems:collapsed && 'center'
+           
           },
         }}
       >
         {/* Header / User Info */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: collapsed ? "center" : "space-between",
-            p: 2,
-            bgcolor: theme.palette.primary.main,
-            color: "white",
-            cursor: "pointer",
-            overflowY: "auto",
-          }}
-          onClick={handleMenuOpen}
-        >
-          {!collapsed && (
-            <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
-              <Avatar sx={{ bgcolor: "primary.light", mr: 1 }}>
-                {user?.tenant_name ? user.tenant_name[0].toUpperCase() : "?"}
-              </Avatar>
-              <Box>
-                <Typography variant="subtitle2" fontWeight="bold">
-                  {user?.tenant_name || user?.name || "User"}
-                </Typography>
-                <Typography variant="caption" sx={{ opacity: 0.8 }}>
-                  {role}
-                </Typography>
-              </Box>
-              {(role === "tenantAdmin" || role === "superAdmin") && (
-                <KeyboardArrowDownIcon fontSize="small" sx={{ ml: "auto" }} />
-              )}
-            </Box>
-          )}
+       
 
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (isMobile) {
-                setMobileOpen(); // only executes on mobile
-              }else{
-                
-                    toggleCollapse();
-              }
-            }}
-          >
-            <MenuIcon sx={{ color: "white" }} />
-          </IconButton>
-        </Box>
+<Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: collapsed ? "center" : "space-between",
+    p: 2,
+    bgcolor: theme.palette.primary.main,
+    color: "white",
+    cursor: "pointer",
+    overflowY: "auto",
+  }}
+>
+  {/* Show user info only when expanded */}
+  {!collapsed && (
+    <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
+      <Avatar sx={{ bgcolor: "primary.light", mr: 1 }}>
+        {user?.tenant_name ? user.tenant_name[0].toUpperCase() : "?"}
+      </Avatar>
+
+      <Box>
+        <Typography variant="subtitle2" fontWeight="bold">
+          {user?.tenant_name || user?.name || "User"}
+        </Typography>
+        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+          {role}
+        </Typography>
+      </Box>
+
+      {/* Arrow when expanded */}
+      {(role === "tenantAdmin" || role === "superAdmin") && (
+        <KeyboardArrowDownIcon
+          fontSize="small"
+          sx={{ ml: "auto" }}
+          onClick={handleMenuOpen}
+        />
+      )}
+    </Box>
+  )}
+
+  {/* Toggle button */}
+  <IconButton
+    size="small"
+    onClick={(e) => {
+      e.stopPropagation();
+      if (isMobile) {
+        setMobileOpen((prev) => !prev); // toggle mobile drawer
+      } else {
+        toggleCollapse(); // toggle desktop collapse
+      }
+    }}
+  >
+    {/* Show CloseIcon when expanded, MenuIcon when collapsed */}
+    {!collapsed ? (
+      <CloseIcon sx={{ color: "white" }} />
+    ) : (
+      <MenuIcon sx={{ color: "white" }} />
+    )}
+  </IconButton>
+
+  {/* Arrow also visible when collapsed */}
+  {collapsed && (role === "tenantAdmin" || role === "superAdmin") && (
+    <KeyboardArrowDownIcon
+      fontSize="small"
+      sx={{ ml: 1 }}
+      onClick={handleMenuOpen}
+    />
+  )}
+</Box>
+
 
         {/* Dropdown Menu */}
         {(role === "tenantAdmin" || role === "superAdmin") && (
@@ -205,7 +232,7 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
             onClose={handleMenuClose}
             anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
             transformOrigin={{ vertical: "top", horizontal: "left" }}
-            PaperProps={{ style: { marginLeft: "80px" } }}
+            PaperProps={{ style: { marginLeft: "10px" } }}
           >
             <MenuItem
               onClick={() => {
@@ -233,9 +260,9 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
         )}
 
         {/* Role-based Menu */}
-        <List sx={{ flexGrow: 1 }}>
+        <List sx={{ flexGrow: 1 }} style={{ alignItems:'center'}}>
           {currentMenuItems.map((section) => (
-            <Box key={section.section} sx={{ mb: 2 }}>
+            <Box key={section.section} sx={{ mb: 2 }} >
               {!collapsed && (
                 <Typography
                   variant="caption"
@@ -316,7 +343,7 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
         <Box sx={{ px: 1, py: 1 }}>
           <Tooltip title="Back to Home" placement="right">
             <ListItemButton onClick={() => navigate("/")}>
-              <ListItemIcon>
+              <ListItemIcon >
                 <ArrowBackIcon sx={{ color: "primary.main" }} />
               </ListItemIcon>
               {!collapsed && <ListItemText primary="Back to Home" />}
@@ -327,7 +354,7 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
         <Divider />
 
         {/* Footer / Quick Settings */}
-        <Box sx={{ p: 2, textAlign: "center" }}>
+        <Box sx={{ p: 2, textAlign: "center" }} >
           {!collapsed && (
             <Typography
               variant="caption"
@@ -339,6 +366,8 @@ const Sidebar = ({mobileOpen,setMobileOpen}) => {
           <Box
             display="flex"
             justifyContent="center"
+            flexDirection={collapsed && 'column'}
+
             alignItems="center"
             gap={2}
           >
