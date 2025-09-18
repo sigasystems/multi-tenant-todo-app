@@ -17,19 +17,22 @@ const CreateTodo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
 
   const handleSubmit = () => {
-    if (!title.trim()) {
-      setSuccess(false);
-      alert("Title is required!");
-      return;
-    }
+  if (!title?.trim() || !description?.trim()) {
+    setError(true);
+    toast.error("Title and Description are required");
+    return;
+  }
 
-    addTodo({ title, description });
-    setTitle("");
-    setDescription("");
-    setSuccess(true);
-  };
+  addTodo({ title, description });
+  setTitle("");
+  setDescription("");
+  setSuccess(true);
+};
+
 
   return (
     <Box sx={{ p: 4, maxWidth: 600, mx: "auto" }}>
@@ -99,16 +102,32 @@ const CreateTodo = () => {
         open={success}
         autoHideDuration={3000}
         onClose={() => setSuccess(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center"}}
       >
         <Alert
           severity="success"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%" , color:'black'}}
           onClose={() => setSuccess(false)}
+          
         >
-          ✅ Todo added successfully!
+          Todo added successfully!
         </Alert>
       </Snackbar>
+
+      <Snackbar
+  open={error}
+  autoHideDuration={3000}
+  onClose={() => setError(false)}
+  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+>
+  <Alert
+    severity="error"
+    sx={{ width: "100%" }}
+    onClose={() => setError(false)}
+  >
+    Fields are required
+  </Alert>
+</Snackbar>
     </Box>
   );
 };
