@@ -31,11 +31,19 @@ import { TodosContext } from "../../context/TodoContext";
 const TodosList = () => {
   const { todos, deleteTodo, updateTodo } = useContext(TodosContext);
 
-  const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
+  const [toast, setToast] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const [editDialog, setEditDialog] = useState({ open: false, todo: null });
-  const [deleteDialog, setDeleteDialog] = useState({ open: false, todoId: null });
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    todoId: null,
+  });
 
-  const handleEditOpen = (todo) => setEditDialog({ open: true, todo: { ...todo } });
+  const handleEditOpen = (todo) =>
+    setEditDialog({ open: true, todo: { ...todo } });
 
   const handleEditChange = (e) => {
     setEditDialog((prev) => ({
@@ -47,15 +55,27 @@ const TodosList = () => {
   const handleEditSave = async () => {
     const { id, title, description } = editDialog.todo;
     if (!title.trim()) {
-      setToast({ open: true, message: "Title cannot be empty", severity: "error" });
+      setToast({
+        open: true,
+        message: "Title cannot be empty",
+        severity: "error",
+      });
       return;
     }
     try {
       await updateTodo(id, { title, description });
-      setToast({ open: true, message: "Todo updated successfully", severity: "success" });
+      setToast({
+        open: true,
+        message: "Todo updated successfully",
+        severity: "success",
+      });
       setEditDialog({ open: false, todo: null });
     } catch {
-      setToast({ open: true, message: "Failed to update todo", severity: "error" });
+      setToast({
+        open: true,
+        message: "Failed to update todo",
+        severity: "error",
+      });
     }
   };
 
@@ -64,19 +84,35 @@ const TodosList = () => {
   const handleDeleteConfirm = async () => {
     try {
       await deleteTodo(deleteDialog.todoId);
-      setToast({ open: true, message: "Todo deleted successfully", severity: "info" });
+      setToast({
+        open: true,
+        message: "Todo deleted successfully",
+        severity: "info",
+      });
       setDeleteDialog({ open: false, todoId: null });
     } catch {
-      setToast({ open: true, message: "Failed to delete todo", severity: "error" });
+      setToast({
+        open: true,
+        message: "Failed to delete todo",
+        severity: "error",
+      });
     }
   };
 
   const handleComplete = async (id) => {
     try {
       await updateTodo(id, { status: "Completed" });
-      setToast({ open: true, message: "Todo marked as completed", severity: "success" });
+      setToast({
+        open: true,
+        message: "Todo marked as completed",
+        severity: "success",
+      });
     } catch {
-      setToast({ open: true, message: "Failed to mark as completed", severity: "error" });
+      setToast({
+        open: true,
+        message: "Failed to mark as completed",
+        severity: "error",
+      });
     }
   };
 
@@ -86,7 +122,8 @@ const TodosList = () => {
         My Todos
       </Typography>
       <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-        Manage your tasks efficiently. Add, edit, delete, or complete your todos.
+        Manage your tasks efficiently. Add, edit, delete, or complete your
+        todos.
       </Typography>
 
       <Card sx={{ mt: 4, borderRadius: 3, boxShadow: 6 }}>
@@ -117,15 +154,33 @@ const TodosList = () => {
                       <TableCell>{todo.description || "-"}</TableCell>
                       <TableCell>
                         <Typography
-                          color={todo.status === "Completed" ? "green" : "text.primary"}
+                          color={
+                            todo.status === "Completed"
+                              ? "green"
+                              : "text.primary"
+                          }
                           fontWeight={todo.status === "Completed" ? 600 : 400}
                         >
                           {todo.status || "Pending"}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <Stack direction="row" spacing={1} justifyContent="flex-end">
-                          <Tooltip title="Mark Completed">
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          justifyContent="flex-end"
+                        >
+                          <Tooltip
+                            title="Mark Completed"
+                            componentsProps={{
+                              tooltip: {
+                                sx: {
+                                  color: "black",
+                                  fontSize: "0.8rem",
+                                },
+                              },
+                            }}
+                          >
                             <span>
                               <IconButton
                                 color="success"
@@ -136,13 +191,39 @@ const TodosList = () => {
                               </IconButton>
                             </span>
                           </Tooltip>
-                          <Tooltip title="Edit">
-                            <IconButton color="primary" onClick={() => handleEditOpen(todo)}>
+                          <Tooltip
+                            title="Edit"
+                            componentsProps={{
+                              tooltip: {
+                                sx: {
+                                  color: "black",
+                                  fontSize: "0.8rem",
+                                },
+                              },
+                            }}
+                          >
+                            <IconButton
+                              color="primary"
+                              onClick={() => handleEditOpen(todo)}
+                            >
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title="Delete">
-                            <IconButton color="error" onClick={() => handleDeleteOpen(todo.id)}>
+                          <Tooltip
+                            title="Delete"
+                            componentsProps={{
+                              tooltip: {
+                                sx: {
+                                  color: "black",
+                                  fontSize: "0.8rem",
+                                },
+                              },
+                            }}
+                          >
+                            <IconButton
+                              color="error"
+                              onClick={() => handleDeleteOpen(todo.id)}
+                            >
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -154,7 +235,11 @@ const TodosList = () => {
               </Table>
             </TableContainer>
           ) : (
-            <Typography variant="body1" color="text.secondary" sx={{ mt: 2, textAlign: "center" }}>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ mt: 2, textAlign: "center" }}
+            >
               No todos found. Add your first task to get started!
             </Typography>
           )}
@@ -190,7 +275,9 @@ const TodosList = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditDialog({ open: false, todo: null })}>Cancel</Button>
+          <Button onClick={() => setEditDialog({ open: false, todo: null })}>
+            Cancel
+          </Button>
           <Button variant="contained" onClick={handleEditSave}>
             Save
           </Button>
@@ -209,8 +296,16 @@ const TodosList = () => {
           <Typography>Are you sure you want to delete this todo?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialog({ open: false, todoId: null })}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleDeleteConfirm}>
+          <Button
+            onClick={() => setDeleteDialog({ open: false, todoId: null })}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteConfirm}
+          >
             Delete
           </Button>
         </DialogActions>
@@ -221,7 +316,7 @@ const TodosList = () => {
         open={toast.open}
         autoHideDuration={3000}
         onClose={() => setToast({ ...toast, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           severity={toast.severity}

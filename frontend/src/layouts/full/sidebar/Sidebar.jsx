@@ -280,8 +280,9 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
                 <Tooltip
                   key={item.text}
                   title={collapsed ? item.text : ""}
-                  placement="right"
+                  placement="right"                 
                   arrow
+                  
                 >
                   <ListItem disablePadding>
                     <ListItemButton
@@ -341,7 +342,14 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
 
         {/* Back Button */}
         <Box sx={{ px: 1, py: 1 }}>
-          <Tooltip title="Back to Home" placement="right">
+          <Tooltip title="Back to Home" placement="right" componentsProps={{
+    tooltip: {
+      sx: {
+        color: "black",
+        fontSize: "0.8rem",
+      },
+    },
+  }}>
             <ListItemButton onClick={() => navigate("/")}>
               <ListItemIcon >
                 <ArrowBackIcon sx={{ color: "primary.main" }} />
@@ -372,7 +380,13 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
             gap={2}
           >
             {/* Notifications */}
-            <Tooltip title="Notifications" placement="top">
+            <Tooltip title="Notifications" placement="top"  componentsProps={{
+    tooltip: {
+      sx: {
+        color: "black",
+        fontSize: "0.8rem",
+      },}
+    }}>
               <IconButton>
                 <NotificationsIcon />
               </IconButton>
@@ -380,7 +394,13 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
 
             {/* Logout */}
             {user && (
-              <Tooltip title="Logout" placement="top">
+              <Tooltip title="Logout" placement="top" componentsProps={{
+    tooltip: {
+      sx: {
+        color: "black",
+        fontSize: "0.8rem",
+      },}
+    }}>
                 <IconButton onClick={openLogoutDialog}>
                   <LogoutIcon color="error" />
                 </IconButton>
