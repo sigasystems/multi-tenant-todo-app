@@ -148,7 +148,7 @@ const Login = () => {
                     name="tenantName"
                     value={formik.values.tenantName}
                     onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                    // onBlur={formik.handleBlur}
                     error={
                       formik.touched.tenantName && Boolean(formik.errors.tenantName)
                     }

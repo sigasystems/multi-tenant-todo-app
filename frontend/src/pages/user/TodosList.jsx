@@ -31,6 +31,8 @@ import { TodosContext } from "../../context/TodoContext";
 const TodosList = () => {
   const { todos, deleteTodo, updateTodo } = useContext(TodosContext);
 
+  console.log("todos",todos)
+
   const [toast, setToast] = useState({
     open: false,
     message: "",
@@ -117,7 +119,7 @@ const TodosList = () => {
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 1200, mx: "auto" }}>
+    <Box sx={{ p: 2, mx: "auto" }}>
       <Typography variant="h3" fontWeight="bold" gutterBottom>
         My Todos
       </Typography>
@@ -126,16 +128,18 @@ const TodosList = () => {
         todos.
       </Typography>
 
-      <Card sx={{ mt: 4, borderRadius: 3, boxShadow: 6 }}>
+      <Card sx={{ mt: 4, borderRadius: 3, boxShadow: 6, width: "95%", maxWidth: 1200, mx: "auto" }}>
         <CardContent>
           {todos.length > 0 ? (
-            <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
+            <TableContainer component={Paper} sx={{ boxShadow: "none", width: "100%" }}>
               <Table>
                 <TableHead>
                   <TableRow sx={{ backgroundColor: "#f3f4f6" }}>
                     <TableCell sx={{ fontWeight: 600 }}>Title</TableCell>
                     <TableCell sx={{ fontWeight: 600 }}>Description</TableCell>
                     <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Created At</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Updated At</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600 }}>
                       Actions
                     </TableCell>
@@ -143,93 +147,83 @@ const TodosList = () => {
                 </TableHead>
                 <TableBody>
                   {todos.map((todo) => (
-                    <TableRow
-                      key={todo.id}
-                      sx={{
-                        "&:hover": { backgroundColor: "#fafafa" },
-                        transition: "background-color 0.2s ease",
-                      }}
-                    >
-                      <TableCell>{todo.title}</TableCell>
-                      <TableCell>{todo.description || "-"}</TableCell>
-                      <TableCell>
-                        <Typography
-                          color={
-                            todo.status === "Completed"
-                              ? "green"
-                              : "text.primary"
-                          }
-                          fontWeight={todo.status === "Completed" ? 600 : 400}
-                        >
-                          {todo.status || "Pending"}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          justifyContent="flex-end"
-                        >
-                          <Tooltip
-                            title="Mark Completed"
-                            componentsProps={{
-                              tooltip: {
-                                sx: {
-                                  color: "black",
-                                  fontSize: "0.8rem",
-                                },
-                              },
-                            }}
-                          >
-                            <span>
-                              <IconButton
-                                color="success"
-                                onClick={() => handleComplete(todo.id)}
-                                disabled={todo.status === "Completed"}
-                              >
-                                <CheckCircleIcon />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                          <Tooltip
-                            title="Edit"
-                            componentsProps={{
-                              tooltip: {
-                                sx: {
-                                  color: "black",
-                                  fontSize: "0.8rem",
-                                },
-                              },
-                            }}
-                          >
-                            <IconButton
-                              color="primary"
-                              onClick={() => handleEditOpen(todo)}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip
-                            title="Delete"
-                            componentsProps={{
-                              tooltip: {
-                                sx: {
-                                  color: "black",
-                                  fontSize: "0.8rem",
-                                },
-                              },
-                            }}
-                          >
-                            <IconButton
-                              color="error"
-                              onClick={() => handleDeleteOpen(todo.id)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
+                   <TableRow
+  key={todo.id}
+  sx={{
+    "&:hover": { backgroundColor: "#fafafa" },
+    transition: "background-color 0.2s ease",
+  }}
+>
+  <TableCell>{todo.title}</TableCell>
+  <TableCell>{todo.description || "-"}</TableCell>
+  <TableCell>
+    <Typography
+      color={todo.status === "Completed" ? "green" : "text.primary"}
+      fontWeight={todo.status === "Completed" ? 600 : 400}
+    >
+      {todo.status || "Pending"}
+    </Typography>
+  </TableCell>
+  <TableCell>
+    {new Date(todo.createdAt).toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
+  </TableCell>
+  <TableCell>
+    {new Date(todo.updatedAt).toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
+  </TableCell>
+  <TableCell align="right">
+    <Stack direction="row" spacing={1} justifyContent="flex-end">
+      <Tooltip
+        title="Mark Completed"
+        componentsProps={{
+          tooltip: { sx: { color: "black", fontSize: "0.8rem" } },
+        }}
+      >
+        <span>
+          <IconButton
+            color="success"
+            onClick={() => handleComplete(todo.id)}
+            disabled={todo.status === "Completed"}
+          >
+            <CheckCircleIcon />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip
+        title="Edit"
+        componentsProps={{
+          tooltip: { sx: { color: "black", fontSize: "0.8rem" } },
+        }}
+      >
+        <IconButton color="primary" onClick={() => handleEditOpen(todo)}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        title="Delete"
+        componentsProps={{
+          tooltip: { sx: { color: "black", fontSize: "0.8rem" } },
+        }}
+      >
+        <IconButton color="error" onClick={() => handleDeleteOpen(todo.id)}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  </TableCell>
+</TableRow>
+
                   ))}
                 </TableBody>
               </Table>
