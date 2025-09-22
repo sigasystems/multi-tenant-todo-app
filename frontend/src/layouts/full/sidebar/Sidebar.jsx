@@ -31,7 +31,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import CloseIcon from "@mui/icons-material/Close";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
@@ -207,9 +208,9 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
   >
     {/* Show CloseIcon when expanded, MenuIcon when collapsed */}
     {!collapsed ? (
-      <CloseIcon sx={{ color: "white" }} />
+      <ArrowCircleLeftIcon sx={{ color: "white" }} />
     ) : (
-      <MenuIcon sx={{ color: "white" }} />
+      <ArrowCircleRightIcon  sx={{ color: "white" }} />
     )}
   </IconButton>
 
