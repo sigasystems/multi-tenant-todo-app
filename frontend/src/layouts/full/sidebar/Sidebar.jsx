@@ -160,7 +160,7 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
     display: "flex",
     alignItems: "center",
     justifyContent: collapsed ? "center" : "space-between",
-    p: 2,
+    p: 3,
     bgcolor: theme.palette.primary.main,
     color: "white",
     cursor: "pointer",
@@ -283,6 +283,14 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
                   title={collapsed ? item.text : ""}
                   placement="right"                 
                   arrow
+                  componentsProps={{
+    tooltip: {
+      sx: {
+        color: "black",
+        fontSize: "0.8rem",
+      },
+    },
+  }}
                   
                 >
                   <ListItem disablePadding>
